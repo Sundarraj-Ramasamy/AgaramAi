@@ -1,2 +1,2 @@
-# React
-React Learn
+# AI
+Artificial Intelligence
