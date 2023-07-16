@@ -1,5 +1,5 @@
 /* Reset default browser styles */
-body, h1, h2, h3, h4, h5, h6, p, ul, li {
+body, h1, h2, h3, h4, h5, h6, p, ul, li, form {
   margin: 0;
   padding: 0;
 }
@@ -11,27 +11,51 @@ body {
 }
 
 header {
-  background-color: #f2f2f2;
+  background-color: #333;
   padding: 20px;
 }
 
 h1 {
   font-size: 28px;
   margin-bottom: 10px;
+  color: #fff;
+}
+
+nav {
+  margin-top: 10px;
 }
 
 nav ul {
   list-style: none;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 nav ul li {
-  display: inline;
   margin-right: 10px;
 }
 
 nav ul li a {
   text-decoration: none;
-  color: #333;
+  color: #fff;
+  transition: color 0.3s;
+}
+
+nav ul li a:hover {
+  color: #aaa;
+}
+
+nav .menu-toggle {
+  display: none;
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+nav .menu-toggle:hover {
+  transform: scale(1.1);
 }
 
 main {
@@ -40,18 +64,130 @@ main {
 
 section {
   margin-bottom: 40px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
   font-size: 24px;
   margin-bottom: 10px;
+  color: #333;
+}
+
+p {
+  color: #555;
+  margin-bottom: 10px;
+}
+
+ul {
+  margin-left: 20px;
+  margin-bottom: 15px;
+  color: #555;
+  list-style-type: disc;
+}
+
+ul li {
+  margin-bottom: 5px;
 }
 
 footer {
-  background-color: #f2f2f2;
+  background-color: #333;
   padding: 20px;
   text-align: center;
+  color: #fff;
 }
 
 /* Additional custom styles */
-/* Add your own custom styles to enhance the design of your AI information website */
+form {
+  margin-top: 10px;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  color: #777;
+}
+
+input[type="text"],
+input[type="email"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+button[type="submit"] {
+  background-color: #ff8c00;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: #ff6f00;
+}
+
+/* Additional styles for a super look */
+body {
+  background-color: #f9f9f9;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+nav ul li a {
+  padding: 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+nav ul li a:hover {
+  background-color: #555;
+  color: #fff;
+}
+
+footer p {
+  margin-bottom: 0;
+  font-size: 14px;
+}
+
+/* Media Queries for Responsive Design */
+@media screen and (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  nav ul {
+    display: none;
+  }
+
+  nav.open ul {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  nav .menu-toggle {
+    display: block;
+  }
+
+  main {
+    padding-top: 60px;
+  }
+}

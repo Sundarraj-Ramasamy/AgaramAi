@@ -6,8 +6,9 @@
 </head>
 <body>
   <header>
-    <h1>Welcome to AgaramAi</h1>
+    <h1>Welcome to AI Information</h1>
     <nav>
+      <div class="menu-toggle">&#9776;</div>
       <ul>
         <li><a href="#home">Home</a></li>
         <li><a href="#about">About</a></li>
@@ -16,32 +17,67 @@
         <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
-  </header>
+  </header>  
 
   <main>
     <section id="home">
       <h2>Home</h2>
-      <!-- Content about AI and its significance -->
+      <p>Welcome to the AI Information website, your ultimate resource for all things related to Artificial Intelligence (AI). Explore our content to learn about the latest advancements, applications, and impact of AI in various fields.</p>
     </section>
 
     <section id="about">
       <h2>About</h2>
-      <!-- Information about the website and its purpose -->
+      <p>The AI Information website aims to provide comprehensive and reliable information about AI. Our team of experts is dedicated to delivering high-quality content, including articles, tutorials, and resources, to help you understand AI concepts and stay up-to-date with the latest trends in the field.</p>
+      <p>Whether you're an AI enthusiast, a student, or a professional working in the industry, our goal is to provide valuable insights and resources to foster your knowledge and understanding of AI.</p>
     </section>
 
     <section id="articles">
       <h2>Articles</h2>
-      <!-- List of informative articles about AI -->
+      <ul>
+        <li>
+          <h3>Introduction to Machine Learning</h3>
+          <p>Learn the fundamentals of machine learning, including supervised and unsupervised learning techniques, and how they are used to train models for AI applications.</p>
+          <p>Explore real-world examples of machine learning algorithms in action and understand their impact in various industries such as healthcare, finance, and transportation.</p>
+        </li>
+        <li>
+          <h3>Natural Language Processing (NLP)</h3>
+          <p>Discover how NLP enables computers to understand, interpret, and generate human language, and explore its applications in sentiment analysis, language translation, and chatbots.</p>
+          <p>Learn about popular NLP libraries and frameworks and get hands-on experience in building NLP models to solve real-world problems.</p>
+        </li>
+        <li>
+          <h3>Computer Vision and Image Recognition</h3>
+          <p>Delve into the world of computer vision and image recognition, and understand how AI algorithms can analyze and interpret visual data, leading to applications like object detection and facial recognition.</p>
+          <p>Learn about convolutional neural networks (CNNs), image preprocessing techniques, and explore state-of-the-art computer vision models.</p>
+        </li>
+      </ul>
     </section>
 
     <section id="resources">
       <h2>Resources</h2>
-      <!-- Links to helpful AI resources such as tutorials, books, or courses -->
+      <ul>
+        <li><a href="https://example.com/tutorial1">AI Tutorial 1</a></li>
+        <li><a href="https://example.com/tutorial2">AI Tutorial 2</a></li>
+        <li><a href="https://example.com/book">Recommended AI Books</a></li>
+        <li><a href="https://example.com/course">AI Online Courses</a></li>
+      </ul>
+      <p>Explore these resources to deepen your understanding of AI and enhance your skills. The tutorials provide step-by-step guidance, while the recommended books offer in-depth knowledge on specific AI topics. Additionally, the online courses offer comprehensive learning experiences to further advance your AI expertise.</p>
     </section>
 
     <section id="contact">
       <h2>Contact</h2>
-      <!-- Contact form or contact details -->
+      <p>Feel free to reach out to us with any questions or inquiries. You can contact us by filling out the form below:</p>
+      <form>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" required></textarea>
+
+        <button type="submit">Send Message</button>
+      </form>
     </section>
   </main>
 
@@ -50,3 +86,25 @@
   </footer>
 </body>
 </html>
+<script>
+  const menuToggle = document.querySelector('.menu-toggle');
+  const nav = document.querySelector('nav');
+
+  menuToggle.addEventListener('click', () => {
+    nav.classList.toggle('open');
+  });
+
+  function toggleMenu() {
+    if (window.innerWidth <= 768) {
+      nav.classList.remove('open');
+      menuToggle.style.display = 'block';
+    } else {
+      nav.classList.add('open');
+      menuToggle.style.display = 'none';
+    }
+  }
+
+  toggleMenu();
+
+  window.addEventListener('resize', toggleMenu);
+</script>
