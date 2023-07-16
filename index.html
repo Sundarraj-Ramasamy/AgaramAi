@@ -19,6 +19,7 @@
         <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
+    <div class="top-icon" onclick="scrollToTop()">&#8593;</div>
   </header>
 
   <main>
@@ -275,4 +276,11 @@
   toggleMenu();
 
   window.addEventListener('resize', toggleMenu);
+  function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
 </script>

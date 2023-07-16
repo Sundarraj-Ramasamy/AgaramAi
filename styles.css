@@ -23,6 +23,8 @@ h1 {
 
 nav {
   margin-top: 10px;
+  display: flex;
+  align-items: center;
 }
 
 nav ul {
@@ -60,6 +62,29 @@ nav .menu-toggle:hover {
 
 main {
   padding: 20px;
+}
+
+.top-icon {
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  background-color: #333;
+  color: #fff;
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, color 0.3s;
+  border: #ff6f00 solid 2px;
+}
+
+.top-icon:hover {
+  background-color: #555;
 }
 
 section {
