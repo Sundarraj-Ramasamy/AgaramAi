@@ -7,6 +7,7 @@ import About from './components/About';
 import Articles from './components/Articles';
 import Resources from './components/Resources';
 import Contact from './components/Contact';
+import ConsentBanner from './components/ConsentBanner';
 import './styles/styles.css';
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
         </Routes>
       </div>
       <Footer />
+      <ConsentBanner />
     </div>
   );
 };
