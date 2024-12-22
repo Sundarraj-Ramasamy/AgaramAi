@@ -134,6 +134,7 @@ ul li {
 }
 .content {
   flex: 1; /* Equivalent to flex-grow: 1, flex-shrink: 1, and flex-basis: 0 */
+  padding: 20px;
 }
 .footer-content {
   max-width: 1200px;
