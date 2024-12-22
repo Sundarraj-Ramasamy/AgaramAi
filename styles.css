@@ -3,15 +3,22 @@ body, h1, h2, h3, h4, h5, h6, p, ul, li, form {
   margin: 0;
   padding: 0;
 }
-
 /* Set basic styles */
 body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
 }
-
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 header {
-  background-color: #333;
+  background-color: #0d344d;
   padding: 20px;
 }
 
@@ -66,8 +73,8 @@ main {
 
 .top-icon {
   position: fixed;
-  bottom: 10px;
-  right: 20px;
+  bottom: 0;
+  right: 0;
   background-color: #333;
   color: #fff;
   font-size: 24px;
@@ -81,6 +88,7 @@ main {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s, color 0.3s;
   border: #ff6f00 solid 2px;
+  opacity: 0.5;
 }
 
 .top-icon:hover {
@@ -117,13 +125,21 @@ ul li {
   margin-bottom: 5px;
 }
 
-footer {
-  background-color: #333;
+/* Footer styles */
+.footer {
+  background-color: #0d344d;
   padding: 20px;
   text-align: center;
   color: #fff;
 }
-
+.content {
+  flex: 1; /* Equivalent to flex-grow: 1, flex-shrink: 1, and flex-basis: 0 */
+  padding: 20px;
+}
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
 /* Additional custom styles */
 form {
   margin-top: 10px;
@@ -185,6 +201,7 @@ nav ul li a:hover {
 footer p {
   margin-bottom: 0;
   font-size: 14px;
+  color: #fff;
 }
 
 /* Media Queries for Responsive Design */
