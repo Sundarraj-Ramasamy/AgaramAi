@@ -3,10 +3,16 @@
   "homepage": "https://agaramai.com",
   "version": "0.1.0",
   "private": true,
+  "description": "Agaram AI - A React application for AI-driven solutions",
+  "keywords": [
+    "react",
+    "ai",
+    "web",
+    "application"
+  ],
+  "author": "Agaram AI Team",
+  "license": "MIT",
   "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
@@ -15,37 +21,24 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.14.2",
-    "react-scripts": "^3.0.1",
     "styled-components": "^6.1.13",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -b master -d build",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "deploy": "gh-pages -b master -d dist"
   },
   "devDependencies": {
-    "gh-pages": "^5.0.0"
+    "@vitejs/plugin-react": "^4.6.0",
+    "eslint": "^9.31.0",
+    "eslint-plugin-react": "^7.37.5",
+    "gh-pages": "^5.0.0",
+    "prettier": "^3.6.2",
+    "vite": "^7.0.5",
+    "vite-plugin-compression": "^0.5.1",
+    "vitest": "^3.2.4"
   }
 }

@@ -18,7 +18,7 @@ body {
   min-height: 100vh;
 }
 header {
-  background-color: #333;
+  background-color: #0d344d;
   padding: 20px;
 }
 
@@ -127,7 +127,7 @@ ul li {
 
 /* Footer styles */
 .footer {
-  background-color: #333;
+  background-color: #0d344d;
   padding: 20px;
   text-align: center;
   color: #fff;

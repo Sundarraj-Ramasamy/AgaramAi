@@ -26,8 +26,8 @@ app.post('/send-email', (req, res) => {
 
   // Setup email data
   const mailOptions = {
-    from: 'your-email@gmail.com', // Replace with your email address
-    to: 'your-email@gmail.com', // Replace with the recipient's email address
+    from: 'your-email@gmail.com',
+    to: email,
     subject: 'New Contact Form Submission',
     text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
   };
