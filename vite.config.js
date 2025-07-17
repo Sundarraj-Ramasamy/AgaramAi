@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import compression from 'vite-plugin-compression';
 
 export default defineConfig({
-  base: '/AgaramAi/',
+  base: '/',
   plugins: [react(), compression()],
 });
 
