@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Artificial Intelligence" />
-    <title>AgaramAi</title>
-    <link rel="stylesheet" href="/styles.css" />
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-4BLR5M35JS"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
+ <head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Artificial Intelligence" />
+  <title>AgaramAi</title>
 
-      gtag("config", "G-4BLR5M35JS");
-    </script>
-    <script type="module" crossorigin src="/assets/index-CLiEz6dX.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-De8XzkC5.css">
-  </head>
+  <!-- ✅ REMOVE this if you're not using public/styles.css -->
+  <!-- <link rel="stylesheet" href="/styles.css" /> -->
+
+  <!-- ✅ GTM - Keep as-is for production -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4BLR5M35JS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag("js", new Date());
+    gtag("config", "G-4BLR5M35JS");
+  </script>
+
+  <!-- ✅ Vite Production Assets -->
+  <script type="module" crossorigin src="/assets/index-CLiEz6dX.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-De8XzkC5.css">
+</head>
+   
   <body>
     <div id="root"></div>
   </body>
