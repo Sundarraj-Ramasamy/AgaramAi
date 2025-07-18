@@ -1,22 +1,7 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 
 const Home = () => {
-  useEffect(() => {
-  const toggleMenu = () => {
-    const nav = document.querySelector('nav');
-    const menuToggle = document.querySelector('.menu-toggle');
-    if (window.innerWidth <= 768) {
-      nav.classList.remove('open');
-      menuToggle.style.display = 'block';
-    } else {
-      nav.classList.add('open');
-      menuToggle.style.display = 'none';
-    }
-  };
-  toggleMenu();
-  window.addEventListener('resize', toggleMenu);
-  return () => window.removeEventListener('resize', toggleMenu);
-}, []);
+
   return (
     <section id="home">
       <h2>Home</h2>
