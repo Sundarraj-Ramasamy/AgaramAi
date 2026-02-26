@@ -199,12 +199,21 @@ form {
   margin-top: 1rem;
 }
 
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
 label {
   display: block;
-  margin-top: 1rem;
-  margin-bottom: 0.25rem;
-  color: #666;
-  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.required-indicator {
+  color: #e74c3c;
+  margin-left: 0.25rem;
 }
 
 input[type="text"],
@@ -212,8 +221,8 @@ input[type="email"],
 textarea {
   width: 100%;
   padding: 0.75rem;
-  margin-bottom: 0.75rem;
-  border: 1px solid #ccc;
+  margin-bottom: 0.5rem;
+  border: 2px solid #ccc;
   border-radius: 0.25rem;
   font-family: inherit;
   font-size: 1rem;
@@ -226,6 +235,65 @@ textarea:focus {
   outline: none;
   border-color: #ff8c00;
   box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.1);
+}
+
+input[type="text"]:disabled,
+input[type="email"]:disabled,
+textarea:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+input[type="text"]:invalid:not(:placeholder-shown),
+input[type="email"]:invalid:not(:placeholder-shown),
+textarea:invalid:not(:placeholder-shown) {
+  border-color: #e74c3c;
+}
+
+input[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  border-color: #e74c3c;
+}
+
+.error-message {
+  display: block;
+  color: #e74c3c;
+  font-size: 0.875rem;
+  margin-top: -0.5rem;
+  margin-bottom: 0.75rem;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-feedback {
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+  border-radius: 0.25rem;
+  border-left: 4px solid;
+  animation: slideDown 0.3s ease;
+}
+
+.form-feedback.success {
+  background-color: #d4edda;
+  color: #155724;
+  border-left-color: #28a745;
+}
+
+.form-feedback.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-left-color: #e74c3c;
 }
 
 button[type="submit"],
@@ -243,7 +311,7 @@ button[type="submit"],
   text-decoration: none;
 }
 
-button[type="submit"]:hover {
+button[type="submit"]:hover:not(:disabled) {
   background-color: #ff6f00;
   transform: translateY(-2px);
 }
@@ -251,6 +319,16 @@ button[type="submit"]:hover {
 button[type="submit"]:focus {
   outline: 2px solid #333;
   outline-offset: 2px;
+}
+
+button[type="submit"]:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+button[type="submit"]:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .back-link:hover,
@@ -439,6 +517,10 @@ footer p {
 
   label {
     margin-top: 0.75rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
   }
 
   button[type="submit"],
