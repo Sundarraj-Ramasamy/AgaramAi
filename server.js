@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Validate required environment variables
-const requiredEnvVars = ['EMAIL_USER', 'EMAIL_PASS', 'ADMIN_EMAIL'];
+const requiredEnvVars = ['BREVO_EMAIL', 'BREVO_API_KEY', 'ADMIN_EMAIL'];
 const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
 
 if (missingEnvVars.length > 0) {
@@ -61,18 +61,20 @@ app.post('/send-email', (req, res) => {
     const sanitizedEmail = email.toLowerCase();
     const sanitizedMessage = sanitizeInput(message);
 
-    // Create a Nodemailer transporter
+    // Create a Nodemailer transporter using Brevo SMTP
     const transporter = nodemailer.createTransport({
-      service: 'Gmail',
+      host: 'smtp-relay.brevo.com',
+      port: 587,
+      secure: false,
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
+        user: process.env.BREVO_EMAIL,
+        pass: process.env.BREVO_API_KEY
       }
     });
 
     // Setup email data - send to admin, not user
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: process.env.BREVO_EMAIL,
       to: process.env.ADMIN_EMAIL,
       replyTo: sanitizedEmail,
       subject: `New Contact Form Submission from ${sanitizedName}`,
