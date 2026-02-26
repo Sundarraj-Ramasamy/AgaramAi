@@ -1,37 +1,97 @@
-/* Reset default browser styles */
+/* ============================================
+   Skip Link (Accessibility)
+   ============================================ */
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background-color: #ff8c00;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  z-index: 100;
+  border-radius: 0.25rem;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid #333;
+  outline-offset: 0;
+}
+
+/* ============================================
+   Reset & Base Styles
+   ============================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
 body, h1, h2, h3, h4, h5, h6, p, ul, li, form {
   margin: 0;
   padding: 0;
 }
-/* Set basic styles */
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   line-height: 1.6;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  margin: 0;
+  background-color: #f9f9f9;
+  color: #333;
 }
+
+/* ============================================
+   App Layout
+   ============================================ */
+
 .App {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
+
+main {
+  flex: 1;
+  padding: 1.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ============================================
+   Header & Navigation
+   ============================================ */
+
 header {
   background-color: #0d344d;
-  padding: 20px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 h1 {
-  font-size: 28px;
-  margin-bottom: 10px;
+  font-size: 1.75rem;
   color: #fff;
+  flex-basis: 100%;
 }
 
 nav {
-  margin-top: 10px;
   display: flex;
   align-items: center;
+  flex-grow: 1;
+  width: 100%;
 }
 
 nav ul {
@@ -39,197 +99,429 @@ nav ul {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-}
-
-nav ul li {
-  margin-right: 10px;
+  width: 100%;
+  gap: 0.5rem;
 }
 
 nav ul li a {
   text-decoration: none;
   color: #fff;
-  transition: color 0.3s;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.3s, color 0.3s;
+  display: inline-block;
 }
 
 nav ul li a:hover {
-  color: #aaa;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-nav .menu-toggle {
+nav ul li a:focus {
+  outline: 2px solid #ff8c00;
+  outline-offset: 2px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-toggle {
   display: none;
-  font-size: 24px;
+  background: none;
+  border: none;
   color: #fff;
+  font-size: 1.5rem;
   cursor: pointer;
+  padding: 0.5rem;
   transition: transform 0.3s;
 }
 
-nav .menu-toggle:hover {
+.menu-toggle:hover {
   transform: scale(1.1);
 }
 
-main {
-  padding: 20px;
+.menu-toggle:focus {
+  outline: 2px solid #ff8c00;
+  outline-offset: 2px;
 }
 
-.top-icon {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  background-color: #333;
-  color: #fff;
-  font-size: 24px;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s, color 0.3s;
-  border: #ff6f00 solid 2px;
-  opacity: 0.5;
-}
-
-.top-icon:hover {
-  background-color: #555;
-}
+/* ============================================
+   Sections & Typography
+   ============================================ */
 
 section {
-  margin-bottom: 40px;
+  margin-bottom: 2.5rem;
   background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
-  font-size: 24px;
-  margin-bottom: 10px;
+  font-size: 1.5rem;
+  color: #0d344d;
+  margin-bottom: 1rem;
+  margin-top: 1.25rem;
+  line-height: 1.4;
+}
+
+h2:first-child {
+  margin-top: 0;
+}
+
+h3 {
+  font-size: 1.25rem;
   color: #333;
+  margin-bottom: 0.75rem;
+  margin-top: 1rem;
+  line-height: 1.4;
 }
 
 p {
   color: #555;
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
+  line-height: 1.8;
 }
 
 ul {
-  margin-left: 20px;
-  margin-bottom: 15px;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
   color: #555;
   list-style-type: disc;
 }
 
 ul li {
-  margin-bottom: 5px;
+  margin-bottom: 0.5rem;
 }
 
-/* Footer styles */
-.footer {
-  background-color: #0d344d;
-  padding: 20px;
-  text-align: center;
-  color: #fff;
-}
-.content {
-  flex: 1; /* Equivalent to flex-grow: 1, flex-shrink: 1, and flex-basis: 0 */
-  padding: 20px;
-}
-.footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-/* Additional custom styles */
+/* ============================================
+   Forms & Buttons
+   ============================================ */
+
 form {
-  margin-top: 10px;
+  margin-top: 1rem;
 }
 
 label {
   display: block;
-  margin-top: 10px;
-  color: #777;
+  margin-top: 1rem;
+  margin-bottom: 0.25rem;
+  color: #666;
+  font-weight: 500;
 }
 
 input[type="text"],
 input[type="email"],
 textarea {
   width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border-radius: 4px;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
   border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-button[type="submit"] {
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: #ff8c00;
+  box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.1);
+}
+
+button[type="submit"],
+.back-link {
   background-color: #ff8c00;
   color: #fff;
-  padding: 10px 20px;
+  padding: 0.75rem 1.5rem;
   border: none;
   cursor: pointer;
-  margin-top: 10px;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+  border-radius: 0.25rem;
+  transition: background-color 0.3s, transform 0.2s;
+  font-size: 1rem;
+  font-weight: 500;
+  display: inline-block;
+  text-decoration: none;
 }
 
 button[type="submit"]:hover {
   background-color: #ff6f00;
+  transform: translateY(-2px);
 }
 
-/* Additional styles for a super look */
-body {
-  background-color: #f9f9f9;
+button[type="submit"]:focus {
+  outline: 2px solid #333;
+  outline-offset: 2px;
 }
 
-header {
+.back-link:hover,
+.back-link:focus {
+  background-color: #ff6f00;
+  outline: 2px solid #333;
+  outline-offset: 2px;
+}
+
+/* ============================================
+   Utilities
+   ============================================ */
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  font-size: 1.125rem;
+  color: #666;
+}
+
+.top-icon {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  background-color: #ff8c00;
+  color: #fff;
+  font-size: 1.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s, transform 0.3s;
+  padding: 0;
+  opacity: 0.85;
+  z-index: 999;
 }
 
-nav ul li a {
-  padding: 10px;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+.top-icon:hover {
+  background-color: #ff6f00;
+  opacity: 1;
+  transform: scale(1.1);
 }
 
-nav ul li a:hover {
-  background-color: #555;
+.top-icon:focus {
+  outline: 2px solid #333;
+  outline-offset: 2px;
+  opacity: 1;
+}
+
+/* ============================================
+   404 Page
+   ============================================ */
+
+.not-found {
+  text-align: center;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.not-found h2 {
+  margin-top: 0;
+  font-size: 2rem;
+}
+
+.not-found p {
+  font-size: 1.125rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+
+footer {
+  background-color: #0d344d;
+  padding: 1.5rem 1.25rem;
+  text-align: center;
   color: #fff;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
 
 footer p {
-  margin-bottom: 0;
-  font-size: 14px;
   color: #fff;
+  margin-bottom: 0;
+  font-size: 0.875rem;
 }
 
-/* Media Queries for Responsive Design */
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
 @media screen and (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+
   header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 1rem;
   }
 
   h1 {
-    text-align: center;
+    flex-basis: auto;
+  }
+
+  .menu-toggle {
+    display: block;
+    align-self: flex-end;
+    margin-top: -3rem;
+  }
+
+  nav {
+    width: 100%;
   }
 
   nav ul {
     display: none;
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+    justify-content: flex-start;
   }
 
   nav.open ul {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 1rem 0;
+    margin: 1rem 0 0 0;
+    border-radius: 0.25rem;
   }
 
-  nav .menu-toggle {
+  nav.open ul li {
+    width: 100%;
+  }
+
+  nav.open ul li a {
     display: block;
+    padding: 0.75rem 1rem;
+    border-radius: 0;
   }
 
   main {
-    padding-top: 60px;
+    padding: 1rem;
+  }
+
+  section {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  h3 {
+    font-size: 1.125rem;
+  }
+
+  ul {
+    margin-left: 1rem;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  textarea {
+    padding: 0.625rem;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  label {
+    margin-top: 0.75rem;
+  }
+
+  button[type="submit"],
+  .back-link {
+    padding: 0.625rem 1.25rem;
+  }
+
+  .top-icon {
+    bottom: 1rem;
+    right: 1rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 1.25rem;
+  }
+
+  .not-found {
+    min-height: 300px;
+  }
+
+  .not-found h2 {
+    font-size: 1.5rem;
+  }
+
+  .not-found p {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  html {
+    font-size: 13px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.125rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+  }
+
+  section {
+    padding: 0.875rem;
+  }
+
+  main {
+    padding: 0.875rem;
+  }
+
+  button[type="submit"],
+  .back-link {
+    width: 100%;
+    text-align: center;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+
+@media print {
+  .top-icon,
+  .menu-toggle,
+  nav {
+    display: none;
+  }
+
+  body {
+    background-color: #fff;
+  }
+
+  section {
+    box-shadow: none;
+    page-break-inside: avoid;
   }
 }
