@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
+import ThanksModal from './ThanksModal';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ const Contact = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [submitMessage, setSubmitMessage] = useState({ text: '', type: '' });
+  const [showThanksModal, setShowThanksModal] = useState(false);
   const alertRef = useRef(null);
 
   // Validation function
@@ -64,8 +66,16 @@ const Contact = () => {
 
     setIsLoading(true);
     try {
-      const response = await axios.post('/send-email', formData);
-      setSubmitMessage({ text: response.data.message, type: 'success' });
+      // Save contact to JSON file via server
+      await axios.post('/api/save-contact', {
+        name: formData.name,
+        email: formData.email,
+        message: formData.message
+      });
+
+      // Show thanks modal
+      setShowThanksModal(true);
+      setSubmitMessage({ text: 'Your message has been saved successfully!', type: 'success' });
       setFormData({ name: '', email: '', message: '' });
       setErrors({});
       
@@ -74,7 +84,7 @@ const Contact = () => {
         alertRef.current.focus();
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.error || 'An error occurred while sending your message. Please try again later.';
+      const errorMessage = error.response?.data?.error || 'An error occurred while saving your message. Please try again later.';
       setSubmitMessage({ text: errorMessage, type: 'error' });
       
       // Announce error to screen readers
@@ -86,10 +96,20 @@ const Contact = () => {
     }
   };
 
+  const handleCloseThanksModal = () => {
+    setShowThanksModal(false);
+  };
+
   return (
     <section id="contact">
       <h2>Contact</h2>
       <p>Feel free to reach out to us with any questions or inquiries. You can contact us by filling out the form below:</p>
+
+      <ThanksModal 
+        isOpen={showThanksModal} 
+        onClose={handleCloseThanksModal} 
+        name={formData.name}
+      />
 
       {submitMessage.text && (
         <div

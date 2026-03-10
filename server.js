@@ -4,10 +4,21 @@ const express = require('express');
 const nodemailer = require('nodemailer');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+// Path for storing contact submissions
+const contactsDir = path.join(__dirname, 'data');
+const contactsFile = path.join(contactsDir, 'contacts.json');
+
+// Create data directory if it doesn't exist
+if (!fs.existsSync(contactsDir)) {
+  fs.mkdirSync(contactsDir, { recursive: true });
+}
 
 // Validate required environment variables
 const requiredEnvVars = ['BREVO_EMAIL', 'BREVO_API_KEY', 'ADMIN_EMAIL'];
@@ -97,6 +108,63 @@ app.post('/send-email', (req, res) => {
   } catch (error) {
     console.error('Server error:', error.message);
     res.status(500).json({ error: 'An unexpected error occurred. Please try again later.' });
+  }
+});
+
+// POST route to save contact form submissions to JSON file
+app.post('/save-contact', (req, res) => {
+  try {
+    const { name, email, message } = req.body;
+
+    // Validate required fields
+    if (!name || !email || !message) {
+      return res.status(400).json({ error: 'Please fill in all required fields.' });
+    }
+
+    // Validate email format
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ error: 'Please enter a valid email address.' });
+    }
+
+    // Sanitize inputs
+    const sanitizedName = sanitizeInput(name);
+    const sanitizedEmail = email.toLowerCase();
+    const sanitizedMessage = sanitizeInput(message);
+
+    // Create contact object with timestamp
+    const contact = {
+      id: Date.now(),
+      name: sanitizedName,
+      email: sanitizedEmail,
+      message: sanitizedMessage,
+      submittedAt: new Date().toISOString()
+    };
+
+    // Read existing contacts or initialize empty array
+    let contacts = [];
+    if (fs.existsSync(contactsFile)) {
+      try {
+        const fileContent = fs.readFileSync(contactsFile, 'utf8');
+        contacts = JSON.parse(fileContent);
+      } catch (parseError) {
+        console.error('Error parsing contacts file:', parseError.message);
+        contacts = [];
+      }
+    }
+
+    // Add new contact
+    contacts.push(contact);
+
+    // Write to file
+    fs.writeFileSync(contactsFile, JSON.stringify(contacts, null, 2), 'utf8');
+
+    res.status(200).json({ 
+      message: 'Contact information saved successfully!',
+      contactId: contact.id
+    });
+  } catch (error) {
+    console.error('Server error:', error.message);
+    res.status(500).json({ error: 'An error occurred while saving your information. Please try again later.' });
   }
 });
 
