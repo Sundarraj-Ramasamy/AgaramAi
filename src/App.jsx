@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ConsentBanner from './components/ConsentBanner';
+import Chatbot from './components/Chatbot';
 import './styles/styles.css';
 
 // Lazy load pages
@@ -33,6 +34,7 @@ const App = () => {
       </main>
       <Footer />
       <ConsentBanner />
+      <Chatbot />
     </div>
   );
 };
