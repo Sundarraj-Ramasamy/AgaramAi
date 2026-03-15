@@ -13,6 +13,8 @@ const Articles = React.lazy(() => import('./components/Articles'));
 const Resources = React.lazy(() => import('./components/Resources'));
 const Contact = React.lazy(() => import('./components/Contact'));
 const NotFound = React.lazy(() => import('./components/NotFound'));
+const AdminLogin = React.lazy(() => import('./components/AdminLogin'));
+const AdminDashboard = React.lazy(() => import('./components/AdminDashboard'));
 
 const LoadingFallback = () => <div className="loading">Loading...</div>;
 
@@ -28,6 +30,8 @@ const App = () => {
             <Route path="/articles" element={<Articles />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/admin" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

@@ -55,6 +55,7 @@ const Header = () => {
           <li><Link to="/articles" onClick={handleNavLinkClick}>Articles</Link></li>
           <li><Link to="/resources" onClick={handleNavLinkClick}>Resources</Link></li>
           <li><Link to="/contact" onClick={handleNavLinkClick}>Contact</Link></li>
+          <li><Link to="/admin" onClick={handleNavLinkClick}>Admin</Link></li>
         </ul>
       </nav>
       <button 
