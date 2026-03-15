@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import ThanksModal from './ThanksModal';
+import API_BASE from '../utils/api';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -67,7 +68,7 @@ const Contact = () => {
     setIsLoading(true);
     try {
       // Save contact to JSON file via server
-      await axios.post('/api/save-contact', {
+      await axios.post(`${API_BASE}/save-contact`, {
         name: formData.name,
         email: formData.email,
         message: formData.message

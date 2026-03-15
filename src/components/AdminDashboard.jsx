@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import API_BASE from '../utils/api';
 
 const SORT_FIELDS = {
   submittedAt: 'Date',
@@ -35,7 +36,7 @@ const AdminDashboard = () => {
     setIsLoading(true);
     setError('');
     try {
-      const response = await axios.get('/api/admin/contacts', {
+      const response = await axios.get(`${API_BASE}/admin/contacts`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setContacts(response.data.contacts);
@@ -59,7 +60,7 @@ const AdminDashboard = () => {
   const handleDelete = async (id) => {
     const token = getToken();
     try {
-      await axios.delete(`/api/admin/contacts/${id}`, {
+      await axios.delete(`${API_BASE}/admin/contacts/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setContacts((prev) => prev.filter((c) => c.id !== id));

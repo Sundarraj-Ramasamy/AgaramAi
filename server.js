@@ -24,7 +24,7 @@ if (!JWT_SECRET) {
   process.exit(1);
 }
 
-// AES-256 encryption key — loaded from .env (required, must be 64 hex chars = 32 bytes)
+
 const ENCRYPTION_KEY_HEX = process.env.ENCRYPTION_KEY;
 if (!ENCRYPTION_KEY_HEX || ENCRYPTION_KEY_HEX.length < 64) {
   console.error('ERROR: ENCRYPTION_KEY is not set or too short in .env file. Must be 64 hex characters.');
@@ -61,7 +61,6 @@ const readJSON = (filePath, fallback) => {
   }
 };
 
-// Encrypt a string using AES-256-CBC
 const encrypt = (text) => {
   const key = Buffer.from(ENCRYPTION_KEY_HEX.slice(0, 64), 'hex'); // 32 bytes from hex
   const iv = crypto.randomBytes(IV_LENGTH);
@@ -71,14 +70,14 @@ const encrypt = (text) => {
   return iv.toString('hex') + ':' + encrypted;
 };
 
-// Decrypt a string encrypted with encrypt()
+
 const decrypt = (encryptedText) => {
   try {
     const parts = encryptedText.split(':');
-    if (parts.length < 2) return encryptedText; // not encrypted, return as-is
+    if (parts.length < 2) return encryptedText;
     const iv = Buffer.from(parts[0], 'hex');
     const encrypted = parts.slice(1).join(':');
-    const key = Buffer.from(ENCRYPTION_KEY_HEX.slice(0, 64), 'hex'); // 32 bytes from hex
+    const key = Buffer.from(ENCRYPTION_KEY_HEX.slice(0, 64), 'hex'); 
     const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
     let decrypted = decipher.update(encrypted, 'hex', 'utf8');
     decrypted += decipher.final('utf8');

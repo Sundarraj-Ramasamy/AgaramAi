@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import API_BASE from '../utils/api';
 
 const AdminLogin = () => {
   const [credentials, setCredentials] = useState({ username: '', password: '' });
@@ -25,7 +26,7 @@ const AdminLogin = () => {
 
     setIsLoading(true);
     try {
-      const response = await axios.post('/api/admin/login', {
+      const response = await axios.post(`${API_BASE}/admin/login`, {
         username: credentials.username.trim(),
         password: credentials.password
       });
