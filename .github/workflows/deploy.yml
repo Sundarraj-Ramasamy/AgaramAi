@@ -3,7 +3,7 @@ name: Deploy Agaram App to GitHub Pages
 on:
   push:
     branches:
-      - master  # or main
+      - master
   workflow_dispatch:
 
 permissions:
@@ -12,9 +12,7 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    env:
-      VITE_API_URL: https://agaramai.onrender.com
-      
+    
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -29,6 +27,8 @@ jobs:
         run: npm install
 
       - name: Build Vite App
+        env:
+          VITE_API_URL: https://agaramai.onrender.com
         run: npm run build
 
       - name: Deploy to GitHub Pages
