@@ -1,12 +1,7 @@
-// server.js
-
-require('dotenv').config(); // Load .env FIRST before anything else
-
+require('dotenv').config();
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
+const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
@@ -14,55 +9,44 @@ const crypto = require('crypto');
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Max contacts to keep in the JSON file
-const MAX_CONTACTS = 1000;
-
-// JWT secret — loaded from .env (required)
+// ─── Environment Validation ──────────────────────────────────────────────────
 const JWT_SECRET = process.env.JWT_SECRET;
-if (!JWT_SECRET) {
-  console.error('ERROR: JWT_SECRET is not set in .env file. Please configure it.');
-  process.exit(1);
-}
-
-
 const ENCRYPTION_KEY_HEX = process.env.ENCRYPTION_KEY;
-if (!ENCRYPTION_KEY_HEX || ENCRYPTION_KEY_HEX.length < 64) {
-  console.error('ERROR: ENCRYPTION_KEY is not set or too short in .env file. Must be 64 hex characters.');
+const MONGODB_URI = process.env.MONGODB_URI;
+
+if (!JWT_SECRET || !ENCRYPTION_KEY_HEX || !MONGODB_URI) {
+  console.error('ERROR: Missing required environment variables (JWT_SECRET, ENCRYPTION_KEY, or MONGODB_URI).');
   process.exit(1);
 }
+
 const IV_LENGTH = 16;
 
-// Paths for data files
-const dataDir = path.join(__dirname, 'data');
-const contactsFile = path.join(dataDir, 'contacts.json');
-const adminFile = path.join(dataDir, 'admin.json');
+// ─── MongoDB Connection ──────────────────────────────────────────────────────
+mongoose.connect(MONGODB_URI)
+  .then(() => console.log('Connected to MongoDB Atlas'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
-// Create data directory if it doesn't exist
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
-}
+// ─── Database Schemas ────────────────────────────────────────────────────────
+const contactSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true },    // Encrypted
+  message: { type: String, required: true },  // Encrypted
+  submittedAt: { type: Date, default: Date.now }
+});
 
-app.use(cors());
-app.use(bodyParser.json({ limit: '16mb' }));
+const Contact = mongoose.model('Contact', contactSchema);
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
+// ─── Middleware ──────────────────────────────────────────────────────────────
+app.use(cors({
+  origin: ['https://agaramai.com', 'http://localhost:5173'],
+  methods: ['GET', 'POST', 'DELETE'],
+  credentials: true
+}));
+app.use(express.json({ limit: '16mb' }));
 
-const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-const sanitizeInput = (str) => str.trim().slice(0, 5000);
-
-const readJSON = (filePath, fallback) => {
-  if (!fs.existsSync(filePath)) return fallback;
-  try {
-    const content = fs.readFileSync(filePath, 'utf8');
-    return JSON.parse(content);
-  } catch {
-    return fallback;
-  }
-};
-
+// ─── Crypto Helpers ──────────────────────────────────────────────────────────
 const encrypt = (text) => {
-  const key = Buffer.from(ENCRYPTION_KEY_HEX.slice(0, 64), 'hex'); // 32 bytes from hex
+  const key = Buffer.from(ENCRYPTION_KEY_HEX.slice(0, 64), 'hex');
   const iv = crypto.randomBytes(IV_LENGTH);
   const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
   let encrypted = cipher.update(text, 'utf8', 'hex');
@@ -70,25 +54,23 @@ const encrypt = (text) => {
   return iv.toString('hex') + ':' + encrypted;
 };
 
-
 const decrypt = (encryptedText) => {
   try {
     const parts = encryptedText.split(':');
     if (parts.length < 2) return encryptedText;
     const iv = Buffer.from(parts[0], 'hex');
     const encrypted = parts.slice(1).join(':');
-    const key = Buffer.from(ENCRYPTION_KEY_HEX.slice(0, 64), 'hex'); 
+    const key = Buffer.from(ENCRYPTION_KEY_HEX.slice(0, 64), 'hex');
     const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
     let decrypted = decipher.update(encrypted, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
     return decrypted;
   } catch {
-    return encryptedText; // return as-is if decryption fails
+    return encryptedText;
   }
 };
 
 // ─── Auth Middleware ─────────────────────────────────────────────────────────
-
 const requireAuth = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -100,159 +82,82 @@ const requireAuth = (req, res, next) => {
     req.admin = decoded;
     next();
   } catch {
-    return res.status(401).json({ error: 'Invalid or expired session. Please log in again.' });
+    return res.status(401).json({ error: 'Invalid or expired session.' });
   }
 };
 
-// ─── POST /save-contact ──────────────────────────────────────────────────────
+// ─── API Routes ──────────────────────────────────────────────────────────────
 
-app.post('/save-contact', (req, res) => {
+// Public: Save Contact
+app.post('/save-contact', async (req, res) => {
   try {
     const { name, email, message } = req.body;
+    
+    // Simple Validation
+    if (!name || !email || !message) return res.status(400).json({ error: 'All fields required.' });
 
-    if (!name || !email || !message) {
-      return res.status(400).json({ error: 'Please fill in all required fields.' });
-    }
-    if (!isValidEmail(email)) {
-      return res.status(400).json({ error: 'Please enter a valid email address.' });
-    }
-    if (name.length < 2 || name.length > 100) {
-      return res.status(400).json({ error: 'Name must be between 2 and 100 characters.' });
-    }
-    if (message.length < 10 || message.length > 5000) {
-      return res.status(400).json({ error: 'Message must be between 10 and 5000 characters.' });
-    }
+    const newContact = new Contact({
+      name: name.trim(),
+      email: encrypt(email.toLowerCase().trim()),
+      message: encrypt(message.trim())
+    });
 
-    const sanitizedName = sanitizeInput(name);
-    const sanitizedEmail = email.toLowerCase().trim();
-    const sanitizedMessage = sanitizeInput(message);
-
-    // Encrypt sensitive fields
-    const contact = {
-      id: Date.now(),
-      name: sanitizedName,
-      email: encrypt(sanitizedEmail),
-      message: encrypt(sanitizedMessage),
-      submittedAt: new Date().toISOString()
-    };
-
-    let contacts = readJSON(contactsFile, []);
-    if (!Array.isArray(contacts)) contacts = [];
-
-    contacts.push(contact);
-
-    // Enforce 1000-record limit: remove oldest entries if over limit
-    if (contacts.length > MAX_CONTACTS) {
-      contacts = contacts.slice(contacts.length - MAX_CONTACTS);
-    }
-
-    fs.writeFileSync(contactsFile, JSON.stringify(contacts, null, 2), 'utf8');
-    console.log(`New contact saved: ${sanitizedName} (total: ${contacts.length})`);
-
-    res.status(200).json({ message: 'Contact information saved successfully!', contactId: contact.id });
+    await newContact.save();
+    res.status(200).json({ message: 'Contact saved successfully!' });
   } catch (error) {
-    console.error('Server error:', error.message);
-    res.status(500).json({ error: 'An error occurred while saving your information. Please try again later.' });
+    console.error('Save error:', error);
+    res.status(500).json({ error: 'Failed to save information.' });
   }
 });
 
-// ─── POST /admin/login ───────────────────────────────────────────────────────
-
+// Admin: Login
 app.post('/admin/login', async (req, res) => {
   try {
     const { username, password } = req.body;
+    
+    // We compare against ENV for admin credentials to keep it simple
+    const storedUsername = process.env.ADMIN_USERNAME; 
+    const passwordHash = process.env.ADMIN_PASSWORD_HASH;
 
-    if (!username || !password) {
-      return res.status(400).json({ error: 'Username and password are required.' });
+    if (username !== storedUsername) {
+      return res.status(401).json({ error: 'Invalid credentials.' });
     }
 
+    const isMatch = await bcrypt.compare(password, passwordHash);
+    if (!isMatch) return res.status(401).json({ error: 'Invalid credentials.' });
 
-    let adminData = readJSON(adminFile, null);
-    if (!adminData) {
-      // Fallback to environment variables
-      adminData = {
-        username: process.env.ADMIN_USERNAME,
-        usernameHash: process.env.ADMIN_USERNAME_HASH,
-        passwordHash: process.env.ADMIN_PASSWORD_HASH
-      };
-      // If neither username nor usernameHash is set, config is invalid
-      if (!adminData.username && !adminData.usernameHash) {
-        return res.status(500).json({ error: 'Admin configuration not found.' });
-      }
-    }
-
-    // Decrypt stored username and compare (supports both old 'username' field and new 'usernameHash')
-    let storedUsername;
-    if (adminData.usernameHash) {
-      storedUsername = decrypt(adminData.usernameHash);
-    } else if (adminData.username) {
-      storedUsername = adminData.username;
-    } else {
-      return res.status(500).json({ error: 'Admin configuration is invalid.' });
-    }
-
-    if (username.trim().toLowerCase() !== storedUsername.trim().toLowerCase()) {
-      return res.status(401).json({ error: 'Invalid username or password.' });
-    }
-
-    const passwordMatch = await bcrypt.compare(password, adminData.passwordHash);
-    if (!passwordMatch) {
-      return res.status(401).json({ error: 'Invalid username or password.' });
-    }
-
-    const token = jwt.sign(
-      { username: storedUsername },
-      JWT_SECRET,
-      { expiresIn: '2h' }
-    );
-
-    res.status(200).json({ message: 'Login successful.', token });
+    const token = jwt.sign({ user: username }, JWT_SECRET, { expiresIn: '2h' });
+    res.json({ token });
   } catch (error) {
-    console.error('Login error:', error.message);
-    res.status(500).json({ error: 'An error occurred during login. Please try again.' });
+    res.status(500).json({ error: 'Login failed.' });
   }
 });
 
-// ─── GET /admin/contacts ─────────────────────────────────────────────────────
-
-app.get('/admin/contacts', requireAuth, (req, res) => {
+// Admin: Get Contacts (Decrypted)
+app.get('/admin/contacts', requireAuth, async (req, res) => {
   try {
-    const contacts = readJSON(contactsFile, []);
-    // Decrypt sensitive fields and return newest first
-    const decrypted = contacts.map((c) => ({
-      ...c,
+    const contacts = await Contact.find().sort({ submittedAt: -1 });
+    const decryptedData = contacts.map(c => ({
+      id: c._id,
+      name: c.name,
       email: decrypt(c.email),
-      message: decrypt(c.message)
+      message: decrypt(c.message),
+      submittedAt: c.submittedAt
     }));
-    const sorted = [...decrypted].reverse();
-    res.status(200).json({ contacts: sorted, total: sorted.length });
+    res.json({ contacts: decryptedData });
   } catch (error) {
-    console.error('Error reading contacts:', error.message);
-    res.status(500).json({ error: 'Failed to retrieve contacts.' });
+    res.status(500).json({ error: 'Failed to fetch contacts.' });
   }
 });
 
-// ─── DELETE /admin/contacts/:id ──────────────────────────────────────────────
-
-app.delete('/admin/contacts/:id', requireAuth, (req, res) => {
+// Admin: Delete Contact
+app.delete('/admin/contacts/:id', requireAuth, async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
-    let contacts = readJSON(contactsFile, []);
-    const before = contacts.length;
-    contacts = contacts.filter((c) => c.id !== id);
-    if (contacts.length === before) {
-      return res.status(404).json({ error: 'Contact not found.' });
-    }
-    fs.writeFileSync(contactsFile, JSON.stringify(contacts, null, 2), 'utf8');
-    res.status(200).json({ message: 'Contact deleted successfully.' });
+    await Contact.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Deleted successfully.' });
   } catch (error) {
-    console.error('Delete error:', error.message);
-    res.status(500).json({ error: 'Failed to delete contact.' });
+    res.status(500).json({ error: 'Delete failed.' });
   }
 });
 
-// ─── Start Server ────────────────────────────────────────────────────────────
-
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+app.listen(port, () => console.log(`Agaram Server live on port ${port}`));
