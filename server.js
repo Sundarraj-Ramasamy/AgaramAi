@@ -166,9 +166,19 @@ app.post('/admin/login', async (req, res) => {
       return res.status(400).json({ error: 'Username and password are required.' });
     }
 
-    const adminData = readJSON(adminFile, null);
+
+    let adminData = readJSON(adminFile, null);
     if (!adminData) {
-      return res.status(500).json({ error: 'Admin configuration not found.' });
+      // Fallback to environment variables
+      adminData = {
+        username: process.env.ADMIN_USERNAME,
+        usernameHash: process.env.ADMIN_USERNAME_HASH,
+        passwordHash: process.env.ADMIN_PASSWORD_HASH
+      };
+      // If neither username nor usernameHash is set, config is invalid
+      if (!adminData.username && !adminData.usernameHash) {
+        return res.status(500).json({ error: 'Admin configuration not found.' });
+      }
     }
 
     // Decrypt stored username and compare (supports both old 'username' field and new 'usernameHash')
