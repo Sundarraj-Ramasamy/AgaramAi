@@ -25,7 +25,12 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-
+        
+      - name: Debug Env
+        run: echo "The API URL is $VITE_API_URL"
+        env:
+          VITE_API_URL: https://agaramai.onrender.com
+          
       - name: Build Vite App
         env:
           VITE_API_URL: https://agaramai.onrender.com
