@@ -16,6 +16,7 @@ const NotFound = React.lazy(() => import('./components/NotFound'));
 const AdminLogin = React.lazy(() => import('./components/AdminLogin'));
 const AdminDashboard = React.lazy(() => import('./components/AdminDashboard'));
 const Videos = React.lazy(() => import('./components/Videos'));
+const AICook = React.lazy(() => import('./components/AICook'));
 
 const LoadingFallback = () => <div className="loading">Loading...</div>;
 
@@ -34,6 +35,8 @@ const App = () => {
             <Route path="/videos" element={<Videos />} />
             <Route path="/admin" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/videos" element={<Videos />} />
+            <Route path="/ai-cook" element={<AICook />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
