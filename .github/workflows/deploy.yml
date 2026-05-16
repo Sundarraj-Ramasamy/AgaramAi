@@ -25,11 +25,11 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-        
-      - name: Build Production Bundle
+
+      - name: Build Vite App
         env:
           VITE_API_URL: https://agaramai.onrender.com
-        run: VITE_API_URL=https://agaramai.onrender.com npm run build
+        run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
