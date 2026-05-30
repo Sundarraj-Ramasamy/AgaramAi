@@ -10,21 +10,27 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // ─── Environment Validation ──────────────────────────────────────────────────
-const JWT_SECRET = process.env.JWT_SECRET;
-const ENCRYPTION_KEY_HEX = process.env.ENCRYPTION_KEY;
+const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-please-change';
+const ENCRYPTION_KEY_HEX = process.env.ENCRYPTION_KEY || '0000000000000000000000000000000000000000000000000000000000000000';
 const MONGODB_URI = process.env.MONGODB_URI;
 
-if (!JWT_SECRET || !ENCRYPTION_KEY_HEX || !MONGODB_URI) {
-  console.error('ERROR: Missing required environment variables (JWT_SECRET, ENCRYPTION_KEY, or MONGODB_URI).');
-  process.exit(1);
+if (!process.env.JWT_SECRET || !process.env.ENCRYPTION_KEY) {
+  console.warn('WARNING: JWT_SECRET and/or ENCRYPTION_KEY are not set. Using development defaults.');
+}
+if (!MONGODB_URI) {
+  console.warn('WARNING: MONGODB_URI is not set. Contact storage and admin routes may not work until configured.');
 }
 
 const IV_LENGTH = 16;
 
-// ─── MongoDB Connection ──────────────────────────────────────────────────────
-mongoose.connect(MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB Atlas'))
-  .catch(err => console.error('MongoDB connection error:', err));
+// ─── MongoDB Connection ─────────────────────────────────────────────────────
+if (MONGODB_URI) {
+  mongoose.connect(MONGODB_URI)
+    .then(() => console.log('Connected to MongoDB Atlas'))
+    .catch(err => console.error('MongoDB connection error:', err));
+} else {
+  console.warn('Skipping MongoDB connection because MONGODB_URI is missing.');
+}
 
 // ─── Database Schemas ────────────────────────────────────────────────────────
 const contactSchema = new mongoose.Schema({
@@ -157,6 +163,48 @@ app.delete('/admin/contacts/:id', requireAuth, async (req, res) => {
     res.json({ message: 'Deleted successfully.' });
   } catch (error) {
     res.status(500).json({ error: 'Delete failed.' });
+  }
+});
+
+const humanizeTag = (tag) => {
+  if (!tag) return '';
+  return tag
+    .replace(/^en:/, '')
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
+// Public: Search food via Open Food Facts
+app.get('/api/food-search', async (req, res) => {
+  try {
+    const query = req.query.q;
+    if (!query) return res.status(400).json({ error: 'Missing search query.' });
+
+    const url = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=5&lc=en`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Food database request failed');
+
+    const data = await response.json();
+    const products = (data.products || []).map((product) => {
+      const categoriesFromTags = (product.categories_tags || [])
+        .filter((tag) => tag.startsWith('en:'))
+        .map(humanizeTag);
+
+      return {
+        product_name: product.product_name_en || product.product_name || product.generic_name || query,
+        brands: product.brands || '',
+        categories: product.categories_en || product.categories || (categoriesFromTags.length ? categoriesFromTags.join(', ') : ''),
+        ingredients_text: product.ingredients_text_en || product.ingredients_text || '',
+        nutriments: product.nutriments || {},
+        image_url: product.image_front_small_url || product.image_url || ''
+      };
+    });
+
+    res.json({ products });
+  } catch (error) {
+    console.error('Food search error:', error);
+    res.status(500).json({ error: 'Failed to fetch food data.' });
   }
 });
 

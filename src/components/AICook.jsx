@@ -291,7 +291,7 @@ const AICook = () => {
         <div className="recipes-list">
           <h2>Recipes you can make:</h2>
           {recipes.length === 0 ? (
-            <p>No recipes found for the selected ingredients.</p>
+            <p className="no-recipes">No recipes found for the selected ingredients.</p>
           ) : (
             <ul>
               {recipes.map(r => (

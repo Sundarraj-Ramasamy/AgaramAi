@@ -303,6 +303,13 @@
   border-bottom: 3px solid #667eea;
   padding-bottom: 1rem;
 }
+p.no-recipes {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #bd2f57;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
 
 .recipes-list ul {
   list-style: none;
