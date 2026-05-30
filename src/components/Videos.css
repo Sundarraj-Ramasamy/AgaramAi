@@ -1,20 +1,27 @@
 
 .videos-page {
-  max-width: 1200px;
+  max-width: 100%;
+  width: 100%;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 2rem;
+  overflow-x: hidden;
 }
 
 .videos-page h1 {
   text-align: center;
   margin-bottom: 2rem;
+  color: #667eea;
+  font-size: 2.2rem;
+  font-weight: 800;
 }
 
 .videos-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 2.5rem;
-  justify-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
 .video-card {
@@ -22,10 +29,10 @@
   border-radius: 16px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.10);
   padding: 2rem 1.5rem;
-  width: 640px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 }
 
 .video-card h2 {
@@ -36,32 +43,44 @@
 
 .video-embed {
   margin-bottom: 0.5rem;
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
   height: 338px;
+  overflow: hidden;
+  border-radius: 8px;
 }
+
+.video-embed iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
 @media (max-width: 1350px) {
-  .video-card {
-    width: 95vw;
-    max-width: 600px;
+  .videos-list {
+    grid-template-columns: repeat(2, 1fr);
   }
   .video-embed {
-    width: 90vw;
+    width: 100%;
     max-width: 560px;
     height: 315px;
   }
 }
 
 @media (max-width: 900px) {
+  .videos-page {
+    padding: 2rem 1rem;
+  }
   .videos-list {
     grid-template-columns: 1fr;
+    padding: 0;
   }
   .video-card {
-    width: 98vw;
-    max-width: 98vw;
+    padding: 1.5rem 1rem;
   }
   .video-embed {
-    width: 98vw;
-    max-width: 98vw;
+    width: 100%;
+    max-width: 100%;
     height: 56vw;
     min-height: 200px;
   }

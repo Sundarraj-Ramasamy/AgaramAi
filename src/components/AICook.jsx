@@ -10,7 +10,7 @@ const INGREDIENT_CATEGORIES = [
       { name: 'Carrot', img: 'https://img.icons8.com/color/96/000000/carrot.png' },
       { name: 'Onion', img: 'https://img.icons8.com/color/96/000000/onion.png' },
       { name: 'Broccoli', img: 'https://img.icons8.com/color/96/000000/broccoli.png' },
-      { name: 'Bell Pepper', img: 'https://img.icons8.com/color/96/000000/bell-pepper.png' },
+      { name: 'Bell Pepper', img: 'https://img.icons8.com/color/96/000000/paprika.png' },
       { name: 'Garlic', img: 'https://img.icons8.com/color/96/000000/garlic.png' },
       { name: 'Cucumber', img: 'https://img.icons8.com/color/96/000000/cucumber.png' },
       { name: 'Lettuce', img: 'https://img.icons8.com/color/96/000000/lettuce.png' },
@@ -27,7 +27,7 @@ const INGREDIENT_CATEGORIES = [
       { name: 'Cauliflower', img: 'https://img.icons8.com/color/96/000000/cauliflower.png' },
       { name: 'Ginger', img: 'https://img.icons8.com/color/96/000000/ginger.png' },
       { name: 'Lime', img: 'https://img.icons8.com/color/96/000000/lime.png' },
-      { name: 'Lemon', img: 'https://img.icons8.com/color/96/000000/lemon.png' },
+      { name: 'Lemon', img: 'https://twemoji.maxcdn.com/v/latest/72x72/1f34b.png' },
     ]
   },
   {
@@ -37,9 +37,9 @@ const INGREDIENT_CATEGORIES = [
       { name: 'Banana', img: 'https://img.icons8.com/color/96/000000/banana.png' },
       { name: 'Coconut', img: 'https://img.icons8.com/color/96/000000/coconut.png' },
       { name: 'Lime', img: 'https://img.icons8.com/color/96/000000/lime.png' },
-      { name: 'Lemon', img: 'https://img.icons8.com/color/96/000000/lemon.png' },
+      { name: 'Lemon', img: 'https://twemoji.maxcdn.com/v/latest/72x72/1f34b.png' },
       { name: 'Pumpkin', img: 'https://img.icons8.com/color/96/000000/pumpkin.png' },
-      { name: 'Avocado', img: 'https://img.icons8.com/color/96/000000/avocado.png' },
+      { name: 'Avocado', img: 'https://img.icons8.com/color/96/228B22/avocado.png' },
     ]
   },
   {
@@ -48,15 +48,15 @@ const INGREDIENT_CATEGORIES = [
       { name: 'Chicken', img: 'https://img.icons8.com/color/96/000000/chicken.png' },
       { name: 'Fish', img: 'https://img.icons8.com/color/96/000000/fish-food.png' },
       { name: 'Beef', img: 'https://img.icons8.com/color/96/000000/steak.png' },
-      { name: 'Shrimp', img: 'https://img.icons8.com/color/96/000000/shrimp.png' },
+      { name: 'Shrimp', img: 'https://img.icons8.com/color/96/FF69B4/prawn.png' },
       { name: 'Bacon', img: 'https://img.icons8.com/color/96/000000/bacon.png' },
-      { name: 'Lamb', img: 'https://img.icons8.com/color/96/000000/lamb-rack.png' },
+      { name: 'Lamb', img: 'https://img.icons8.com/color/96/8B4513/steak.png' },
       { name: 'Turkey', img: 'https://img.icons8.com/color/96/000000/turkey.png' },
-      { name: 'Ham', img: 'https://img.icons8.com/color/96/000000/ham.png' },
+      { name: 'Ham', img: 'https://img.icons8.com/color/96/FF6347/bacon.png' },
       { name: 'Salmon', img: 'https://img.icons8.com/color/96/000000/salmon.png' },
-      { name: 'Pork', img: 'https://img.icons8.com/color/96/000000/pork.png' },
+      { name: 'Pork', img: 'https://twemoji.maxcdn.com/v/latest/72x72/1f953.png' },
       { name: 'Duck', img: 'https://img.icons8.com/color/96/000000/duck.png' },
-      { name: 'Sausage', img: 'https://img.icons8.com/color/96/000000/sausage.png' },
+      { name: 'Sausage', img: 'https://twemoji.maxcdn.com/v/latest/72x72/1f32d.png' },
     ]
   },
   {
@@ -67,7 +67,7 @@ const INGREDIENT_CATEGORIES = [
       { name: 'Milk', img: 'https://img.icons8.com/color/96/000000/milk-bottle.png' },
       { name: 'Butter', img: 'https://img.icons8.com/color/96/000000/butter.png' },
       { name: 'Yogurt', img: 'https://img.icons8.com/color/96/000000/yogurt.png' },
-      { name: 'Tofu', img: 'https://img.icons8.com/color/96/000000/tofu.png' },
+      { name: 'Tofu', img: 'https://img.icons8.com/color/96/F5DEB3/cheese.png' },
     ]
   },
   {
@@ -77,7 +77,7 @@ const INGREDIENT_CATEGORIES = [
       { name: 'Rice', img: 'https://img.icons8.com/color/96/000000/rice-bowl.png' },
       { name: 'Bread', img: 'https://img.icons8.com/color/96/000000/bread.png' },
       { name: 'Chickpea', img: 'https://img.icons8.com/color/96/000000/chickpeas.png' },
-      { name: 'Beans', img: 'https://img.icons8.com/color/96/000000/beans.png' },
+      { name: 'Beans', img: 'https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f4ab.png' },
       { name: 'Mushroom', img: 'https://img.icons8.com/color/96/000000/mushroom.png' },
       { name: 'Spinach', img: 'https://img.icons8.com/color/96/000000/spinach.png' },
     ]
@@ -137,11 +137,27 @@ const AICook = () => {
   const [instructions, setInstructions] = useState('');
   const [loadingInstructions, setLoadingInstructions] = useState(false);
   const [tab, setTab] = useState(0);
+  const [customInput, setCustomInput] = useState('');
+  const [customIngredients, setCustomIngredients] = useState([]);
 
   const toggleIngredient = (name) => {
     setSelected(sel =>
       sel.includes(name) ? sel.filter(i => i !== name) : [...sel, name]
     );
+  };
+
+  const handleAddCustomIngredient = () => {
+    if (customInput.trim() && !customIngredients.includes(customInput.trim())) {
+      const newIngredient = customInput.trim();
+      setCustomIngredients([...customIngredients, newIngredient]);
+      setSelected([...selected, newIngredient]);
+      setCustomInput('');
+    }
+  };
+
+  const handleRemoveCustomIngredient = (name) => {
+    setCustomIngredients(customIngredients.filter(i => i !== name));
+    setSelected(selected.filter(i => i !== name));
   };
 
   const handleFindRecipes = async () => {
@@ -192,19 +208,21 @@ const AICook = () => {
 
   return (
     <div className="ai-cook-page">
-      <h1>AI Cook: Recipe Finder</h1>
+      <h1>🍳 AI Cook: Recipe Finder</h1>
       <p>Select the ingredients you have, and discover recipes you can cook right now!</p>
+      
       <div className="ingredient-tabs">
         {INGREDIENT_CATEGORIES.map((cat, idx) => (
           <button
             key={cat.label}
-            className={idx === tab ? 'active' : ''}
+            className={`tab-btn ${idx === tab ? 'active' : ''}`}
             onClick={() => setTab(idx)}
           >
             {cat.label}
           </button>
         ))}
       </div>
+      
       <div className="ingredients-grid">
         {(INGREDIENT_CATEGORIES[tab]?.ingredients || []).map(ing => (
           <div
@@ -217,19 +235,57 @@ const AICook = () => {
           </div>
         ))}
       </div>
+
+      <div className="custom-ingredient-section">
+        <h3>Can't find an ingredient?</h3>
+        <div className="custom-input-group">
+          <input
+            type="text"
+            placeholder="Type an ingredient name..."
+            value={customInput}
+            onChange={(e) => setCustomInput(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleAddCustomIngredient()}
+            className="custom-input"
+          />
+          <button onClick={handleAddCustomIngredient} className="add-btn">
+            Add Ingredient
+          </button>
+        </div>
+        
+        {customIngredients.length > 0 && (
+          <div className="custom-ingredients-list">
+            <h4>Your Custom Ingredients:</h4>
+            <div className="custom-tags">
+              {customIngredients.map(ing => (
+                <div key={ing} className="custom-tag">
+                  <span>{ing}</span>
+                  <button
+                    className="remove-tag-btn"
+                    onClick={() => handleRemoveCustomIngredient(ing)}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
       <div className="ai-cook-actions">
-        <button onClick={handleFindRecipes} disabled={selected.length === 0 || loading}>
-          {loading ? 'Searching...' : 'Find Recipes'}
+        <button className="find-recipes-btn" onClick={handleFindRecipes} disabled={selected.length === 0 || loading}>
+          {loading ? '🔄 Searching...' : '🔍 Find Recipes'}
         </button>
-        <button onClick={handleReset} disabled={(selected.length === 0 && !showResults) || loading}>
-          Reset
+        <button className="reset-btn" onClick={handleReset} disabled={(selected.length === 0 && !showResults) || loading}>
+          ↻ Reset
         </button>
       </div>
+
       {loading && (
-        <div className="recipes-list"><p>Loading recipes...</p></div>
+        <div className="recipes-list"><p>⏳ Loading recipes...</p></div>
       )}
       {error && (
-        <div className="recipes-list"><p style={{color: 'red'}}>{error}</p></div>
+        <div className="recipes-list"><p className="error-message">{error}</p></div>
       )}
       {showResults && !loading && !error && !selectedRecipe && (
         <div className="recipes-list">
@@ -239,15 +295,15 @@ const AICook = () => {
           ) : (
             <ul>
               {recipes.map(r => (
-                <li key={r.id} style={{cursor: 'pointer'}} onClick={() => handleRecipeClick(r)}>
+                <li key={r.id} className="recipe-item" onClick={() => handleRecipeClick(r)}>
                   <strong>{r.title}</strong>
-                  {r.image && <div><img src={r.image} alt={r.title} style={{maxWidth: '200px'}} /></div>}
+                  {r.image && <div className="recipe-image-container"><img src={r.image} alt={r.title} className="recipe-img" /></div>}
                   <br />
                   <span className="recipe-ings">
-                    Used: {r.usedIngredients?.map(i => i.name).join(', ')}<br/>
-                    Missed: {r.missedIngredients?.map(i => i.name).join(', ')}
+                    ✓ Used: {r.usedIngredients?.map(i => i.name).join(', ')}<br/>
+                    ✗ Missed: {r.missedIngredients?.map(i => i.name).join(', ')}
                   </span>
-                  <div style={{color:'#0097a7', fontSize:'0.95rem'}}>Click for full recipe</div>
+                  <div className="view-recipe-btn">👉 Click for full recipe</div>
                 </li>
               ))}
             </ul>
@@ -255,20 +311,26 @@ const AICook = () => {
         </div>
       )}
       {selectedRecipe && (
-        <div className="recipes-list">
-          <button onClick={() => { setSelectedRecipe(null); setInstructions(''); }} style={{marginBottom:'1rem'}}>← Back to recipes</button>
+        <div className="recipes-list recipe-details">
+          <button onClick={() => { setSelectedRecipe(null); setInstructions(''); }} className="back-btn">
+            ← Back to recipes
+          </button>
           <h2>{selectedRecipe.title}</h2>
-          {selectedRecipe.image && <div><img src={selectedRecipe.image} alt={selectedRecipe.title} style={{maxWidth: '300px'}} /></div>}
-          <div className="recipe-ings">
-            Used: {selectedRecipe.usedIngredients?.map(i => i.name).join(', ')}<br/>
-            Missed: {selectedRecipe.missedIngredients?.map(i => i.name).join(', ')}
+          {selectedRecipe.image && <div className="recipe-detail-image"><img src={selectedRecipe.image} alt={selectedRecipe.title} /></div>}
+          <div className="recipe-ings recipe-info">
+            <div className="ingredients-info">
+              <strong>✓ Used Ingredients:</strong> {selectedRecipe.usedIngredients?.map(i => i.name).join(', ')}
+            </div>
+            <div className="missing-info">
+              <strong>✗ Missed Ingredients:</strong> {selectedRecipe.missedIngredients?.map(i => i.name).join(', ')}
+            </div>
           </div>
           {loadingInstructions ? (
-            <p>Loading instructions...</p>
+            <p>⏳ Loading instructions...</p>
           ) : (
-            <div style={{marginTop:'1rem'}}>
+            <div className="instructions-section">
               <h3>Instructions</h3>
-              <div dangerouslySetInnerHTML={{__html: instructions}} />
+              <div className="instructions-content" dangerouslySetInnerHTML={{__html: instructions}} />
             </div>
           )}
         </div>
