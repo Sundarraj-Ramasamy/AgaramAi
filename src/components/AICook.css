@@ -23,6 +23,40 @@
   font-size: 1.1rem;
 }
 
+.diet-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  color: #fff;
+}
+
+.diet-toggle span {
+  font-weight: 600;
+}
+
+.diet-btn {
+  padding: 0.7rem 1rem;
+  border-radius: 40px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.diet-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.diet-btn.active {
+  background: #fff;
+  color: #667eea;
+  border-color: #fff;
+}
+
 /* ===== TABS STYLING ===== */
 .ingredient-tabs {
   display: flex;
@@ -80,7 +114,6 @@
   cursor: pointer;
   transition: all 0.3s ease;
   border: 2px solid transparent;
-  hover: scale(1.05);
 }
 
 .ingredient-card:hover {
@@ -283,6 +316,15 @@
   padding: 2rem;
   margin-top: 2rem;
   animation: slideUp 0.4s ease;
+  color: #333;
+}
+
+.recipes-list p {
+  color: #333;
+}
+
+.recipes-list .error-message {
+  color: #d32f2f;
 }
 
 @keyframes slideUp {
@@ -461,8 +503,15 @@ p.no-recipes {
   font-size: 1.4rem;
 }
 
-.instructions-content {
+.instructions-content,
+.instructions-content p,
+.instructions-content ol,
+.instructions-content ul,
+.instructions-content li {
   color: #333;
+}
+
+.instructions-content {
   line-height: 1.8;
   font-size: 1rem;
 }

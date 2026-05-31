@@ -137,6 +137,7 @@ const AICook = () => {
   const [instructions, setInstructions] = useState('');
   const [loadingInstructions, setLoadingInstructions] = useState(false);
   const [tab, setTab] = useState(0);
+  const [diet, setDiet] = useState('all');
   const [customInput, setCustomInput] = useState('');
   const [customIngredients, setCustomIngredients] = useState([]);
 
@@ -165,13 +166,34 @@ const AICook = () => {
     setError('');
     setShowResults(false);
     const apiKey = 'c973c874400d484dbace82e33c0ada06';
-    const query = selected.join(',');
-    const url = `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${query}&number=10&apiKey=${apiKey}`;
+    const query = encodeURIComponent(selected.join(','));
+    const url = `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${query}&number=10&addRecipeInformation=true&apiKey=${apiKey}`;
     try {
       const res = await fetch(url);
       if (!res.ok) throw new Error('API error');
       const data = await res.json();
-      setRecipes(data);
+      let filteredData = data;
+
+      if (diet === 'vegetarian') {
+        const vegetarianResults = await Promise.all(data.map(async (recipe) => {
+          if (recipe.vegetarian === true || /vegetarian/i.test(recipe.title)) {
+            return recipe;
+          }
+          try {
+            const detailsRes = await fetch(
+              `https://api.spoonacular.com/recipes/${recipe.id}/information?apiKey=${apiKey}`
+            );
+            if (!detailsRes.ok) return null;
+            const details = await detailsRes.json();
+            return details.vegetarian ? { ...recipe, vegetarian: true } : null;
+          } catch {
+            return /vegetarian/i.test(recipe.title) ? recipe : null;
+          }
+        }));
+        filteredData = vegetarianResults.filter(Boolean);
+      }
+
+      setRecipes(filteredData);
     } catch (e) {
       setRecipes([]);
       setError('Failed to fetch recipes. Please try again.');
@@ -186,6 +208,7 @@ const AICook = () => {
     setShowResults(false);
     setSelectedRecipe(null);
     setInstructions('');
+    setDiet('all');
   };
 
   const handleRecipeClick = async (recipe) => {
@@ -210,6 +233,15 @@ const AICook = () => {
     <div className="ai-cook-page">
       <h1>🍳 AI Cook: Recipe Finder</h1>
       <p>Select the ingredients you have, and discover recipes you can cook right now!</p>
+      <div className="diet-toggle">
+        <span>Diet preference:</span>
+        <button className={`diet-btn ${diet === 'all' ? 'active' : ''}`} onClick={() => setDiet('all')}>
+          All
+        </button>
+        <button className={`diet-btn ${diet === 'vegetarian' ? 'active' : ''}`} onClick={() => setDiet('vegetarian')}>
+          Vegetarian only
+        </button>
+      </div>
       
       <div className="ingredient-tabs">
         {INGREDIENT_CATEGORIES.map((cat, idx) => (
