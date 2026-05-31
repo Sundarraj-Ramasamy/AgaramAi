@@ -16,18 +16,59 @@ const lifestyleOptions = ['Active', 'Sedentary', 'Fitness'];
 
 const contains = (text, pattern) => pattern.test(text);
 
-const allergyMatches = (foodText, allergies) => {
-  if (!allergies) return false;
+const normalizeText = (text) => (text || '').toString().toLowerCase();
+
+const stripHtml = (html) => (html || '').toString().replace(/<[^>]+>/g, '').trim();
+
+const normalizeAllergyTerms = (allergies) => {
   return allergies
-    .split(',')
+    .split(/[,;\/]+/)
     .map((item) => item.trim().toLowerCase())
     .filter(Boolean)
-    .some((term) => foodText.includes(term));
+    .map((term) => term.replace(/[^a-z0-9]+/g, ' ').trim())
+    .filter(Boolean);
+};
+
+const allergyMatches = (foodText, allergies) => {
+  if (!allergies || !foodText) return false;
+  const normalizedFoodText = normalizeText(foodText);
+  const terms = normalizeAllergyTerms(allergies);
+
+  return terms.some((term) => {
+    const wordBoundary = new RegExp(`\\b${term.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}\\b`, 'i');
+    return wordBoundary.test(normalizedFoodText) || normalizedFoodText.includes(term);
+  });
+};
+
+const extractAllergenText = (product) => {
+  if (!product) return '';
+
+  const fields = [
+    product.allergens,
+    Array.isArray(product.allergens_tags) ? product.allergens_tags.join(' ') : product.allergens_tags,
+    product.allergens_from_ingredients,
+    Array.isArray(product.allergens_from_ingredients_tags) ? product.allergens_from_ingredients_tags.join(' ') : product.allergens_from_ingredients_tags,
+    Array.isArray(product.allergens_hierarchy) ? product.allergens_hierarchy.join(' ') : product.allergens_hierarchy,
+    product.traces,
+    product.traces_from_ingredients,
+    product.traces_from_user,
+    product.ingredients_text_with_allergens,
+    product.ingredients_text_with_allergens_en,
+    product.ingredients_text_with_allergens_fr,
+    product.ingredients_text,
+    Array.isArray(product.ingredients_hierarchy) ? product.ingredients_hierarchy.join(' ') : product.ingredients_hierarchy,
+    product.categories,
+    product.labels,
+    product.generic_name,
+    product.product_name
+  ];
+
+  return fields.filter(Boolean).join(' ').toLowerCase();
 };
 
 const RULES = [
   {
-    predicate: (context, profile) => allergyMatches(context.ingredients + ' ' + context.query, profile.allergies),
+    predicate: (context, profile) => allergyMatches(context.allergens + ' ' + context.ingredients + ' ' + context.query, profile.allergies),
     result: 'avoid',
     reason: 'This food contains one of your listed allergy ingredients.',
     alternative: 'Avoid this item and choose a safe alternative that does not contain your allergens.'
@@ -140,20 +181,35 @@ const CanIEat = () => {
     setFoodInfo(null);
 
     try {
-      const response = await fetch(`/api/food-search?q=${encodeURIComponent(food.trim())}`);
-      const data = await response.json();
+      const url = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(food.trim())}&search_simple=1&action=process&json=1&page_size=5&lc=en`;
+      const response = await fetch(url);
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to fetch food data.');
+        const contentType = response.headers.get('content-type') || '';
+        const errorData = contentType.includes('application/json') ? await response.json() : null;
+        const friendlyMessage = response.status === 503
+          ? 'OpenFoodFacts is temporarily unavailable. Please try again later.'
+          : errorData?.error || `Failed to fetch food data (${response.status}).`;
+
+        throw new Error(friendlyMessage);
       }
 
-      const product = (data.products || [])[0] || null;
+      const data = await response.json();
+      const products = data.products || [];
+      const product = products.find((item) => item.allergens_lc === 'en') || null;
+
+      if (!product) {
+        throw new Error('No English allergen product was found for this search. Please try a different food item.');
+      }
+
       setFoodInfo(product);
 
       const normalizedQuery = food.trim().toLowerCase();
+      const allergenText = extractAllergenText(product);
       const context = {
         query: normalizedQuery,
         ingredients: (product?.ingredients_text || '').toLowerCase(),
+        allergens: allergenText,
         categories: (product?.categories || '').toLowerCase()
       };
 
@@ -302,8 +358,14 @@ const CanIEat = () => {
               <p><strong>Name:</strong> {foodInfo.product_name}</p>
               {foodInfo.brands && <p><strong>Brand:</strong> {foodInfo.brands}</p>}
               {foodInfo.categories && <p><strong>Categories:</strong> {foodInfo.categories}</p>}
-              {foodInfo.ingredients_text && (
-                <p><strong>Ingredients:</strong> {foodInfo.ingredients_text}</p>
+              {(foodInfo.allergens_from_ingredients || foodInfo.allergens) && (
+                <p><strong>Allergens:</strong> {stripHtml(foodInfo.allergens_from_ingredients || foodInfo.allergens)}</p>
+              )}
+              {foodInfo.traces && <p><strong>May contain traces:</strong> {stripHtml(foodInfo.traces)}</p>}
+              {foodInfo.ingredients_text_with_allergens_en ? (
+                <p><strong>Ingredients (with allergens):</strong> {stripHtml(foodInfo.ingredients_text_with_allergens_en)}</p>
+              ) : foodInfo.ingredients_text && (
+                <p><strong>Ingredients:</strong> {stripHtml(foodInfo.ingredients_text)}</p>
               )}
             </div>
           )}

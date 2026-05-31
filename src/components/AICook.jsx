@@ -161,6 +161,89 @@ const AICook = () => {
     setSelected(selected.filter(i => i !== name));
   };
 
+  const fetchWithTimeout = (url, timeout = 5000) => {
+    return Promise.race([
+      fetch(url),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Fetch timeout')), timeout)
+      )
+    ]);
+  };
+
+  const fetchFromTheMealDB = async (ingredients, filterVegetarian = false) => {
+    try {
+      const allMeals = new Map();
+      const nonVegCategories = /seafood|meat|beef|pork|chicken/i;
+      
+      for (const ingredient of ingredients) {
+        try {
+          const res = await fetchWithTimeout(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${encodeURIComponent(ingredient)}`, 8000);
+          if (!res.ok) continue;
+          const data = await res.json();
+          
+          if (data.meals) {
+            for (const meal of data.meals) {
+              if (!allMeals.has(meal.idMeal)) {
+                allMeals.set(meal.idMeal, {
+                  id: meal.idMeal,
+                  title: meal.strMeal,
+                  image: meal.strMealThumb,
+                  usedIngredients: [{ name: ingredient }],
+                  missedIngredients: [],
+                  source: 'themealdb',
+                });
+              } else {
+                const existing = allMeals.get(meal.idMeal);
+                existing.usedIngredients.push({ name: ingredient });
+              }
+            }
+          }
+        } catch (e) {
+          console.warn(`Failed to fetch meals for ${ingredient}:`, e.message);
+          continue;
+        }
+      }
+      
+      const candidates = Array.from(allMeals.values());
+      if (candidates.length === 0) return null;
+      
+      if (!filterVegetarian) {
+        return candidates.slice(0, 10);
+      }
+      
+      const vegetarianResults = [];
+      for (const meal of candidates) {
+        if (vegetarianResults.length >= 10) break;
+        if (nonVegCategories.test(meal.title)) continue;
+        
+        try {
+          const detailRes = await fetchWithTimeout(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${meal.id}`, 5000);
+          if (!detailRes.ok) continue;
+          const detailData = await detailRes.json();
+          const fullMeal = detailData.meals?.[0];
+          const category = fullMeal?.strCategory || '';
+          const instructions = fullMeal?.strInstructions;
+          
+          if (nonVegCategories.test(category)) continue;
+          
+          vegetarianResults.push({
+            ...meal,
+            category,
+            instructions,
+          });
+        } catch (e) {
+          console.warn(`Failed to fetch details for ${meal.id}:`, e.message);
+          continue;
+        }
+      }
+      
+      return vegetarianResults.length > 0 ? vegetarianResults : null;
+    } catch (e) {
+      console.error('TheMealDB error:', e);
+      return null;
+    }
+  };
+
   const handleFindRecipes = async () => {
     setLoading(true);
     setError('');
@@ -168,14 +251,20 @@ const AICook = () => {
     const apiKey = 'c973c874400d484dbace82e33c0ada06';
     const query = encodeURIComponent(selected.join(','));
     const url = `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${query}&number=10&addRecipeInformation=true&apiKey=${apiKey}`;
+    const nonVegKeywords = /chicken|beef|fish|pork|lamb|shrimp|meat|seafood|salmon|tuna|turkey|duck|bacon|ham|sausage|mutton/i;
+    
     try {
       const res = await fetch(url);
-      if (!res.ok) throw new Error('API error');
+      if (!res.ok) throw new Error('Spoonacular API error');
       const data = await res.json();
+      
       let filteredData = data;
 
       if (diet === 'vegetarian') {
         const vegetarianResults = await Promise.all(data.map(async (recipe) => {
+          if (nonVegKeywords.test(recipe.title)) {
+            return null;
+          }
           if (recipe.vegetarian === true || /vegetarian/i.test(recipe.title)) {
             return recipe;
           }
@@ -185,19 +274,42 @@ const AICook = () => {
             );
             if (!detailsRes.ok) return null;
             const details = await detailsRes.json();
-            return details.vegetarian ? { ...recipe, vegetarian: true } : null;
+            return details.vegetarian && !nonVegKeywords.test(details.title) ? { ...recipe, vegetarian: true } : null;
           } catch {
-            return /vegetarian/i.test(recipe.title) ? recipe : null;
+            return /vegetarian/i.test(recipe.title) && !nonVegKeywords.test(recipe.title) ? recipe : null;
           }
         }));
         filteredData = vegetarianResults.filter(Boolean);
       }
 
-      setRecipes(filteredData);
-    } catch (e) {
-      setRecipes([]);
-      setError('Failed to fetch recipes. Please try again.');
+      if (filteredData.length === 0) {
+        throw new Error('No recipes found from Spoonacular, trying alternative source...');
+      }
+
+      setRecipes(filteredData.map(r => ({ ...r, source: 'spoonacular' })));
+    } catch (spoonacularError) {
+      console.warn('Spoonacular failed, trying TheMealDB...', spoonacularError.message);
+      const mealDBResults = await fetchFromTheMealDB(selected, diet === 'vegetarian');
+      
+      if (mealDBResults && mealDBResults.length > 0) {
+        let filteredData = mealDBResults;
+        
+        if (diet === 'vegetarian') {
+          filteredData = mealDBResults.filter(r => 
+            !nonVegKeywords.test(r.title)
+          );
+        }
+        
+        setRecipes(filteredData.length > 0 ? filteredData : []);
+        if (filteredData.length === 0) {
+          setError('No vegetarian recipes found. Try "All" diet preference.');
+        }
+      } else {
+        setRecipes([]);
+        setError('Failed to fetch recipes from both sources. Please try again.');
+      }
     }
+    
     setShowResults(true);
     setLoading(false);
   };
@@ -217,12 +329,30 @@ const AICook = () => {
     setLoadingInstructions(true);
     setError('');
     try {
-      const apiKey = 'c973c874400d484dbace82e33c0ada06';
-      const url = `https://api.spoonacular.com/recipes/${recipe.id}/information?apiKey=${apiKey}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('Failed to fetch recipe details');
-      const data = await res.json();
-      setInstructions(data.instructions || 'No instructions found.');
+      let instructionsText = '';
+      
+      if (recipe.instructions) {
+        instructionsText = recipe.instructions;
+      } else if (recipe.source === 'themealdb') {
+        const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${recipe.id}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Failed to fetch recipe details');
+        const data = await res.json();
+        if (data.meals && data.meals[0]) {
+          instructionsText = data.meals[0].strInstructions || 'No instructions found.';
+        } else {
+          instructionsText = 'No instructions found.';
+        }
+      } else {
+        const apiKey = 'c973c874400d484dbace82e33c0ada06';
+        const url = `https://api.spoonacular.com/recipes/${recipe.id}/information?apiKey=${apiKey}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Failed to fetch recipe details');
+        const data = await res.json();
+        instructionsText = data.instructions || 'No instructions found.';
+      }
+      
+      setInstructions(instructionsText);
     } catch (e) {
       setInstructions('Failed to fetch instructions.');
     }
