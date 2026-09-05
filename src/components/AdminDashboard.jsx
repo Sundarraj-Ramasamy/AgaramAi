@@ -36,7 +36,7 @@ const AdminDashboard = () => {
     setIsLoading(true);
     setError('');
     try {
-      const response = await axios.get(`${API_BASE}/admin/contacts`, {
+      const response = await axios.get(`${API_BASE}/api/admin-contacts`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setContacts(response.data.contacts);
@@ -60,7 +60,7 @@ const AdminDashboard = () => {
   const handleDelete = async (id) => {
     const token = getToken();
     try {
-      await axios.delete(`${API_BASE}/admin/contacts/${id}`, {
+      await axios.delete(`${API_BASE}/api/admin-contacts/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setContacts((prev) => prev.filter((c) => c.id !== id));

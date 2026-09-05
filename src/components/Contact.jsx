@@ -68,7 +68,7 @@ const Contact = () => {
     setIsLoading(true);
     try {
       // Save contact to JSON file via server
-      await axios.post(`${API_BASE}/save-contact`, {
+      await axios.post(`${API_BASE}/api/save-contact`, {
         name: formData.name,
         email: formData.email,
         message: formData.message
