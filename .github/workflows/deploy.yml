@@ -28,7 +28,7 @@ jobs:
 
       - name: Build Vite App
         env:
-          VITE_API_URL: https://express-k20a9ygz1-sundar-creations.vercel.app
+          VITE_API_URL: https://express-k1vevhmla-sundar-creations.vercel.app/
         run: npm run build
 
       - name: Deploy to GitHub Pages
