@@ -4,63 +4,63 @@ import './Videos.css';
 const videos = [
   {
     id: 1,
-    title: 'Deep Learning Specialization (Andrew Ng)',
-    url: 'https://www.youtube.com/embed/aircAruvnKk',
-    caption: 'Deep learning explained with practical examples by Andrew Ng.'
+    title: 'Python Full Course for Beginners',
+    url: 'https://www.youtube.com/embed/rfscVS0vtbw',
+    caption: 'Build a strong Python foundation covering variables, functions, data structures, OOP, modules, and core programming concepts.'
   },
   {
     id: 2,
-    title: 'Transformers from Scratch',
-    url: 'https://www.youtube.com/embed/kCc8FmEb1nY',
-    caption: 'A visual and intuitive guide to Transformers.'
+    title: 'Machine Learning for Everybody',
+    url: 'https://www.youtube.com/embed/i_LwzRVP7bg',
+    caption: 'Learn the fundamentals of machine learning including supervised learning, regression, classification, neural networks, TensorFlow, clustering, and PCA.'
   },
   {
     id: 3,
-    title: 'Neural Networks Demystified',
-    url: 'https://www.youtube.com/embed/bxe2T-V8XRs',
-    caption: 'A clear, step-by-step series on neural networks.'
+    title: 'AI Foundations: Python, Machine Learning & Deep Learning',
+    url: 'https://www.youtube.com/embed/0oyDqO8PjIg',
+    caption: 'A comprehensive AI foundation covering Python, machine learning, deep learning, algorithms, data science, and practical AI projects.'
   },
   {
     id: 4,
-    title: 'Machine Learning Crash Course',
-    url: 'https://www.youtube.com/embed/GwIo3gDZCVQ',
-    caption: 'Google’s crash course on machine learning basics.'
+    title: 'Attention in Transformers — Visually Explained',
+    url: 'https://www.youtube.com/embed/eMlx5fFNoYc',
+    caption: 'Understand embeddings, self-attention, masking, multi-head attention, cross-attention, and the core mechanism behind modern LLMs.'
   },
   {
     id: 5,
-    title: 'What is Artificial Intelligence (AI)?',
-    url: 'https://www.youtube.com/embed/2ePf9rue1Ao',
-    caption: 'A simple introduction to AI by IBM.'
+    title: 'Let’s Build GPT: From Scratch',
+    url: 'https://www.youtube.com/embed/kCc8FmEb1nY',
+    caption: 'Build a GPT-style language model from scratch and understand tokenization, self-attention, transformer blocks, training, and text generation.'
   },
   {
     id: 6,
-    title: 'How Machines Learn',
-    url: 'https://www.youtube.com/embed/IpGxLWOIZy4',
-    caption: 'CrashCourse explains how machines learn.'
+    title: 'Large Language Models Explained',
+    url: 'https://www.youtube.com/embed/LPZh9BOjkQs',
+    caption: 'Understand how Large Language Models work, including tokens, embeddings, transformers, training, inference, and text generation.'
   },
   {
     id: 7,
-    title: 'How ChatGPT Works Technically',
-    url: 'https://www.youtube.com/embed/JTxsNm9IdYU',
-    caption: 'A technical explanation of how ChatGPT and large language models work.'
+    title: 'LangChain Crash Course for Beginners',
+    url: 'https://www.youtube.com/embed/aywZrzNaKjs',
+    caption: 'Learn LangChain fundamentals and build LLM applications using prompts, chains, agents, tools, vector stores, and retrieval.'
   },
   {
     id: 8,
-    title: 'What is Deep Learning?',
-    url: 'https://www.youtube.com/embed/5tvmMX8r_OM',
-    caption: 'A simple and visual introduction to deep learning.'
+    title: 'Production RAG with LangChain & Vector Databases',
+    url: 'https://www.youtube.com/embed/mHxLXzYjQRE',
+    caption: 'Learn how to build production-ready RAG systems using document processing, embeddings, vector databases, similarity search, hybrid search, evaluation, and optimization.'
   },
   {
     id: 9,
-    title: 'How to Learn Machine Learning (3 months)',
-    url: 'https://www.youtube.com/embed/Cr6VqTRO1v0',
-    caption: 'A roadmap for learning machine learning in 3 months.'
+    title: 'LangGraph Complete Course for Beginners',
+    url: 'https://www.youtube.com/embed/jGg_1h0qzaM',
+    caption: 'Learn LangGraph for building stateful AI agents, workflows, persistence, tools, human-in-the-loop systems, and multi-step agentic applications.'
   },
   {
     id: 10,
-    title: 'AI Explained: The Future of Artificial Intelligence',
-    url: 'https://www.youtube.com/embed/2ePf9rue1Ao',
-    caption: 'A look at the future of AI and its impact.'
+    title: 'Agentic AI — Complete Course for Beginners',
+    url: 'https://www.youtube.com/embed/Zy7EXDONlTY',
+    caption: 'Build production-ready AI agents and multi-agent systems using LangChain, LangGraph, RAG, memory, tools, human-in-the-loop, FastAPI, Docker, and cloud deployment.'
   }
 ];
 
