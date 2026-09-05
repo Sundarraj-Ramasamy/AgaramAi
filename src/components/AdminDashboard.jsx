@@ -61,6 +61,7 @@ const AdminDashboard = () => {
     const token = getToken();
     try {
       await axios.delete(`${API_BASE}/api/admin-delete-contact/${id}`, {
+        method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
       setContacts((prev) => prev.filter((c) => c.id !== id));
