@@ -60,7 +60,7 @@ const AdminDashboard = () => {
   const handleDelete = async (id) => {
     const token = getToken();
     try {
-      await axios.delete(`${API_BASE}/api/admin-delete-contact/${id}`, {
+      await axios.delete(`${API_BASE}/api/admin-delete-contact?id=${encodeURIComponent(id)}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
